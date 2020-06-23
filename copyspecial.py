@@ -21,19 +21,20 @@ def get_special_paths(dirname):
     """Given a dirname, returns a list of all its special files."""
     special_dir_files = []
     for file in os.listdir(dirname):
-        special_file = re.findall(r'__(\w+)__', file)
+        special_file = re.search(r'__(\w+)__', file)
         if special_file:
-            special_dir_files.append(os.path.abspath(file))
-        
+            special_dir_files.append(os.path.abspath(os.path.join(dirname, file)))
+    #print(special_dir_files)
     return special_dir_files
 
 
 def copy_to(path_list, dest_dir):
-    if not os.path.isdir(dest_dir):
+    if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)
     for path in path_list:
-        shutil.copy(path, dest_dir)
-    return
+        fname = os.path.basename(path)
+        shutil.copy(path, os.path.join(dest_dir, fname))
+    
 
 
 def zip_to(path_list, dest_zip):
